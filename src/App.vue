@@ -1,16 +1,17 @@
 <template>
   <v-app id="app">
+    <!-- Navigation -->
     <Navigation />
+    <!-- Navigation -->
+
     <v-content>
-      <v-container class="fill-height" fluid>
-        <h1>Test</h1>
-      </v-container>
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Navigation from './components/Navigation'
+import Navigation from "./components/Navigation";
 
 export default {
   name: "App",
@@ -28,7 +29,7 @@ export default {
 
 <style lang="scss">
 main {
-  background-image: url('./assets/bagels.jpg');
+  background-image: url("./assets/bagels.jpg");
   background-size: cover;
 }
 </style>
