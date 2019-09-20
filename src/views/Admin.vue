@@ -2,14 +2,19 @@
   <v-container>
     <v-row>
       <v-col sm3 offset-md="1" md="5">
-        <h1>Menu Items</h1>
+        <h1>Current Bagels in Menu Items</h1>
         <div class="pa-2" id="info">
           <v-simple-table id="menu-table">
             <thead>
               <tr>
-                <th class="text-left" style="width: 70%;">Name of item</th>
-                <th class="text-left" style="width: 20%;">Price</th>
-                <th class="text-left" style="width: 50%;">Add to basket</th>
+                <th class="text-left" style="width: 70%;">Name of item
+                  <v-btn color="orange" small text to="/addNew">
+                    <v-icon>add</v-icon><span>New</span>
+                  </v-btn>
+                </th>
+                <th class="text-left" style="width: 100px;">Price</th>
+                <th class="text-left" style="width: 100px;">Edit</th>
+                <th class="text-left" style="width: 100px;">Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -20,7 +25,18 @@
                 </td>
                 <td>{{ item.price }}</td>
                 <td>
-                  <v-btn small text @click="addToBasket(item)"><v-icon color="orange">add_box</v-icon></v-btn>
+                  <v-btn small text>
+                    <v-icon color="orange">
+                      edit
+                    </v-icon>
+                  </v-btn>
+                </td>
+                <td>
+                  <v-btn small text>
+                    <v-icon color="orange">
+                      delete
+                    </v-icon>
+                  </v-btn>
                 </td>
               </tr>
             </tbody>
@@ -29,51 +45,9 @@
       </v-col>
 
       <v-col sm3 offset-md="1" md="4">
-        <h1>Current Basket</h1>
+        <h1>Preivew</h1>
         <div class="pa-2" id="info">
-          <v-simple-table id="menu-table" v-if="basket.length > 0">
-            <thead>
-              <tr>
-                <th class="text-left" style="width: 20%;">Quantity</th>
-                <th class="text-left" style="width: 60%;">Name of item</th>
-                <th class="text-left" style="width: 10%;">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in basket" :key="item.name">
-                <td>
-                  <v-icon color="orange" @click="increaseQnt(item)">add_box</v-icon>
-                  {{ item.quantity }}
-                  <v-icon color="orange" @click="decreaseQnt(item)">indeterminate_check_box</v-icon>
-                </td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.price }}</td>
-              </tr>
-            </tbody>
-          </v-simple-table>
-
-          <v-simple-table v-else>
-            The basket is empty.
-          </v-simple-table>
-
-          <v-divider></v-divider>
-
-          <v-row id="basket_checkout" class="mt-4" style="margin: 0;">
-            <v-col>
-              <p>Subtotal:</p>
-              <p>Delivery:</p>
-              <p>Total amount:</p>
-            </v-col>
-            <v-col class="text-right">
-              <p>{{ subTotal }} DKK</p>
-              <p>10 DKK</p>
-              <p><b>{{ total }} DKK</b></p>
-            </v-col>
-          </v-row>
-          <v-row style="margin: 0;">
-            <v-spacer></v-spacer>
-            <v-btn color="orange">Checkout</v-btn>
-          </v-row>
+          Right
         </div>
       </v-col>
     </v-row>
@@ -81,13 +55,42 @@
 </template>
 
 <script>
-import { dbMenuAdd } from '../../firebase'
-
 export default {
   name: "Menu",
   data() {
     return {
-      menuItems: [],
+      menuItems: [
+        {
+          name: "Frozen Yogurt",
+          description: 'Sugar, stuff and more sugar.',
+          price: 159
+        },
+        {
+          name: "Ice cream sandwich",
+          description: 'Sugar, stuff and more sugar.',
+          price: 237
+        },
+        {
+          name: "Eclair",
+          description: 'Sugar, stuff and more sugar.',
+          price: 262
+        },
+        {
+          name: "Cupcake",
+          description: 'Sugar, stuff and more sugar.',
+          price: 305
+        },
+        {
+          name: "Gingerbread",
+          description: 'Sugar, stuff and more sugar.',
+          price: 356
+        },
+        {
+          name: "Jelly bean",
+          description: 'Sugar, stuff and more sugar.',
+          price: 375
+        }
+      ],
       basket: []
     };
   },
@@ -107,19 +110,6 @@ export default {
       var totalCost = this.subTotal + deliveryPrice
       return totalCost
     }
-  },
-  created() {
-    dbMenuAdd.get().then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        var menuItemData = doc.data()
-        this.menuItems.push({
-          id: doc.id,
-          name: menuItemData.name,
-          description: menuItemData.description,
-          price: menuItemData.price
-        })
-      })
-    })
   },
   methods: {
     addToBasket(item) {

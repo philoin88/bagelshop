@@ -5,6 +5,7 @@
         <router-link tag="li" to="/"><v-icon color="orange">home</v-icon> Home</router-link>
         <router-link tag="li" to="/menu"><v-icon color="orange">restaurant_menu</v-icon> Menu</router-link>
         <router-link tag="li" to="/about"><v-icon color="inprogress">info</v-icon> About</router-link>
+        <router-link tag="li" to="/admin"><v-icon color="inprogress">lock</v-icon> Admin</router-link>
       </ul>
     </v-navigation-drawer>
 
