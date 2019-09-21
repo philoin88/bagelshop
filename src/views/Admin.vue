@@ -32,7 +32,7 @@
                   </v-btn>
                 </td>
                 <td>
-                  <v-btn small text>
+                  <v-btn small text @click="deleteItem(item.id)">
                     <v-icon color="orange">
                       delete
                     </v-icon>
@@ -55,41 +55,14 @@
 </template>
 
 <script>
+import { dbMenuAdd } from '../../firebase'
+
 export default {
   name: "Menu",
-  data() {
+  data () {
     return {
       menuItems: [
-        {
-          name: "Frozen Yogurt",
-          description: 'Sugar, stuff and more sugar.',
-          price: 159
-        },
-        {
-          name: "Ice cream sandwich",
-          description: 'Sugar, stuff and more sugar.',
-          price: 237
-        },
-        {
-          name: "Eclair",
-          description: 'Sugar, stuff and more sugar.',
-          price: 262
-        },
-        {
-          name: "Cupcake",
-          description: 'Sugar, stuff and more sugar.',
-          price: 305
-        },
-        {
-          name: "Gingerbread",
-          description: 'Sugar, stuff and more sugar.',
-          price: 356
-        },
-        {
-          name: "Jelly bean",
-          description: 'Sugar, stuff and more sugar.',
-          price: 375
-        }
+        
       ],
       basket: []
     };
@@ -111,8 +84,29 @@ export default {
       return totalCost
     }
   },
+  created () {
+    dbMenuAdd.get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        var menuItemData = doc.data()
+        this.menuItems.push({
+          id: doc.id,
+          name: menuItemData.name,
+          description: menuItemData.description,
+          price: menuItemData.price
+        })
+      })
+    })
+  },
   methods: {
-    addToBasket(item) {
+    deleteItem (id) {
+      dbMenuAdd.doc(id).delete().then(function() {
+        console.log('delete success')
+      })
+      .catch(function(err) {
+        console.log('deleteItem - err', err);
+      })
+    },
+    addToBasket (item) {
       if (this.basket.find(itemInArray => item.name === itemInArray.name)) {
         item = this.basket.find(itemInArray => item.name === itemInArray.name)
         this.increaseQnt(item)
@@ -125,10 +119,10 @@ export default {
         })
       }
     },
-    increaseQnt(item) {
+    increaseQnt (item) {
       item.quantity++
     },
-    decreaseQnt(item) {
+    decreaseQnt (item) {
       item.quantity--
 
       if (item.quantity === 0) {

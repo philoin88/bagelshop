@@ -71,7 +71,7 @@ import { dbMenuAdd } from '../../../firebase'
 
 export default {
   name: "AddNewItems",
-  data() {
+  data () {
     return {
       name: '',
       description: '',

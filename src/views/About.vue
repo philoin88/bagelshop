@@ -50,5 +50,4 @@ export default {
   font-size: 150%;
   padding: 50px;
 }
-
 </style>
